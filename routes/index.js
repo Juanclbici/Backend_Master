@@ -1,4 +1,4 @@
-const authRoutes = require('./api/auth');
+const authRoutes = require('./api/user/auth');
 const protectedRoutes = require('./private');
 
 module.exports = {

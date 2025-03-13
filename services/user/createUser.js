@@ -1,4 +1,5 @@
-const UserModel = require('../models/User');
+const UserModel = require('../../models/User');
+const bcrypt = require('bcrypt');
 const { status } = require('http-status');
 
 const createUser = async (req, res) => {
@@ -9,7 +10,9 @@ const createUser = async (req, res) => {
       return res.status(status.BAD_REQUEST).json({ error: "Todos los campos son obligatorios." });
     }
 
-    const newUser = await UserModel.create({ name, email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await UserModel.create({ name, email, password: hashedPassword });
 
     return res.status(201).json({
       message: "Usuario creado correctamente",
@@ -25,3 +28,4 @@ const createUser = async (req, res) => {
 };
 
 module.exports = { createUser };
+

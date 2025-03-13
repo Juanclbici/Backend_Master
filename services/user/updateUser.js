@@ -1,4 +1,5 @@
-const UserModel = require("../models/User");
+const UserModel = require("../../models/User");
+const bcrypt = require('bcrypt');
 const { status } = require("http-status");
 
 const updateUser = async (req, res) => {
@@ -11,10 +12,13 @@ const updateUser = async (req, res) => {
     if (!user) {
       return res.status(status.NOT_FOUND).json({ error: "Usuario no encontrado." });
     }
-
+    let hashedPassword = user.password;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
     user.name = name || user.name;
     user.email = email || user.email;
-    user.password = password || user.password;
+    user.password = hashedPassword;
 
     await user.save();
 

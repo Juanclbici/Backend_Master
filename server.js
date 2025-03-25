@@ -1,12 +1,13 @@
 const express = require('express');
 const sequelize = require('./config/databases');
-const routes = require('./routes');  
+const routes = require('./routes'); 
 require('dotenv').config();
 
 const app = express();
+const limiter = require('./services/middlewares/rateLimit'); 
 const PORT = process.env.PORT || 3000;
 
-
+app.use(limiter);
 app.use(express.json());
 
 // Sincronizar la base de datos

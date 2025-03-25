@@ -12,25 +12,30 @@ const auth = require('../../../services/user/auth');
 
 const { loginUser } = require("../../../services/user/login");
 
+const authMiddleware = require('../../../services/middlewares/authMiddleware');
+
 // Ruta para registrar usuario (ejemplo original)
 router.post('/user/register2',auth.register);
 
 // Ruta para registrar un nuevo usuario
 router.post('/user/register', createUser.createUser);
 
+// Ruta para iniciar sesión (acceso público)
+router.post("/user/login", loginUser);
+
+
+// Rutas protegidas con middleware de autenticacion
+
 // Ruta para obtener todos los usuarios
-router.get("/user/getAll", getUsers);
+router.get("/user/getAll", authMiddleware, getUsers);
 
 // Ruta para obtener un usuario por ID
-router.get("/user/get/:id", getUserById);
+router.get("/user/get/:id", authMiddleware, getUserById);
 
 // Ruta para actualizar un usuario
-router.put("/user/update/:id", updateUser);
+router.put("/user/update/:id", authMiddleware, updateUser);
 
 // Ruta para eliminar un usuario
-router.delete("/user/delete/:id", deleteUser);
-
-// Ruta para login
-router.post("/user/login", loginUser);
+router.delete("/user/delete/:id", authMiddleware, deleteUser);
 
 module.exports = router;
